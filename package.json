@@ -1,14 +1,25 @@
 {
-  "name": "pancakeswap-peripheral",
+  "name": "ApeSwap-AMM-Periphery",
   "version": "1.1.0-beta.0",
-  "description": "🎚 Peripheral smart contracts for interacting with pancake",
+  "description": "🎚 Peripheral smart contracts for interacting with ApeSwap",
   "engines": {
     "node": ">=10"
   },
-  "homepage": "https://pancakeswap.finance",
+  "homepage": "https://",
   "repository": {
     "type": "git",
-    "url": "https://github.com/pancakeswap/pancake-swap-periphery.git"
+    "url": "https://github.com/ApeSwapFinance/apeswap-swap-periphery"
+  },
+  "scripts": {
+    "lint": "yarn prettier ./test/*.ts --check",
+    "lint:fix": "yarn prettier ./test/*.ts --write",
+    "clean": "rimraf ./build/",
+    "precompile": "yarn clean",
+    "compile": "waffle .waffle.json",
+    "compile:truffle": "truffle compile",
+    "pretest": "yarn compile",
+    "test": "mocha",
+    "prepublishOnly": "yarn test"
   },
   "files": [
     "build",
@@ -17,6 +28,7 @@
   "dependencies": {
     "@uniswap/lib": "1.1.1",
     "@uniswap/v2-core": "^1.0.1",
+    "truffle": "^5.1.65",
     "truffle-hdwallet-provider": "^1.0.17",
     "truffle-plugin-verify": "^0.4.0"
   },
@@ -33,18 +45,6 @@
     "solc": "0.6.6",
     "ts-node": "^8.5.4",
     "typescript": "^3.7.3"
-  },
-  "scripts": {
-    "lint": "yarn prettier ./test/*.ts --check",
-    "lint:fix": "yarn prettier ./test/*.ts --write",
-    "clean": "rimraf ./build/",
-    "copy-v1-artifacts": "ncp ./buildV1 ./build",
-    "precompile": "yarn clean",
-    "compile": "waffle .waffle.json",
-    "postcompile": "yarn copy-v1-artifacts",
-    "pretest": "yarn compile",
-    "test": "mocha",
-    "prepublishOnly": "yarn test"
   },
   "license": "GPL-3.0-or-later"
 }
