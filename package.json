@@ -1,7 +1,7 @@
 {
   "name": "ApeSwap-AMM-Periphery",
   "version": "1.1.0-beta.0",
-  "description": "🎚 Peripheral smart contracts for interacting with ApeSwap",
+  "description": "🎚 Router smart contracts for interacting with ApeSwap",
   "engines": {
     "node": ">=10"
   },
@@ -17,8 +17,9 @@
     "precompile": "yarn clean",
     "compile": "waffle .waffle.json",
     "compile:truffle": "truffle compile",
-    "migrate:testnet": "truffle migrate --reset --network testnet",
+    "migrate:testnet": "truffle migrate --network testnet",
     "migrate:dev": "truffle migrate --network development",
+    "flatten:router": "truffle-flattener ./contracts/PancakeRouter.sol --output ./PancakeRouter_flat.sol",
     "pretest": "yarn compile",
     "test": "mocha",
     "prepublishOnly": "yarn test"
@@ -28,9 +29,11 @@
     "contracts"
   ],
   "dependencies": {
+    "@ethersproject/solidity": "^5.0.9",
     "@uniswap/lib": "1.1.1",
     "@uniswap/v2-core": "^1.0.1",
     "truffle": "^5.1.65",
+    "truffle-flattener": "^1.5.0",
     "truffle-hdwallet-provider": "^1.0.17",
     "truffle-plugin-verify": "^0.4.0"
   },

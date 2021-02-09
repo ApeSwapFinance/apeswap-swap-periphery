@@ -13,7 +13,7 @@ module.exports = {
     testnet: {
       provider: () => new HDWalletProvider(mnemonicTestnet, `https://data-seed-prebsc-1-s1.binance.org:8545`, 0, 10),
       network_id: 97,
-      confirmations: 10,
+      confirmations: 2,
       timeoutBlocks: 200,
       skipDryRun: true
     },
@@ -30,11 +30,15 @@ module.exports = {
   mocha: {
     // timeout: 100000
   },
-
-  // Configure your compilers
   compilers: {
     solc: {
-      version: "0.6.6"
-    }
+      version: "0.6.6",    // Fetch exact version from solc-bin (default: truffle's version)
+      settings: {          // See the solidity docs for advice about optimization and evmVersion
+        optimizer: {
+          enabled: true,
+          runs: 200
+        },
+      }
+    },
   }
 }
