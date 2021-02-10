@@ -5,7 +5,7 @@
   "engines": {
     "node": ">=10"
   },
-  "homepage": "https://",
+  "homepage": "https://apeswap.finance",
   "repository": {
     "type": "git",
     "url": "https://github.com/ApeSwapFinance/apeswap-swap-periphery"
