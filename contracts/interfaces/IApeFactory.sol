@@ -1,6 +1,6 @@
 pragma solidity >=0.6.6;
 
-interface IPancakeFactory {
+interface IApeFactory {
     event PairCreated(address indexed token0, address indexed token1, address pair, uint);
 
     function feeTo() external view returns (address);
