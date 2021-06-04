@@ -29,21 +29,20 @@
     "contracts"
   ],
   "dependencies": {
-    "@ethersproject/solidity": "^5.0.9",
     "@truffle/hdwallet-provider": "^1.4.0",
     "@uniswap/lib": "1.1.1",
     "@uniswap/v2-core": "^1.0.1",
     "dotenv": "^9.0.2",
+    "ethers": "^5.3.0",
     "truffle": "^5.1.65",
     "truffle-flattener": "^1.5.0",
-    "truffle-hdwallet-provider": "^1.0.17",
     "truffle-plugin-verify": "^0.4.0"
   },
   "devDependencies": {
     "@types/chai": "^4.2.6",
     "@types/mocha": "^5.2.7",
     "chai": "^4.2.0",
-    "ethereum-waffle": "^2.4.1",
+    "ethereum-waffle": "^3.3.0",
     "ethereumjs-util": "^6.2.0",
     "mocha": "^6.2.2",
     "ncp": "^2.0.0",
