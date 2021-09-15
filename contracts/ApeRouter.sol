@@ -3,7 +3,7 @@ pragma solidity =0.6.6;
 /*
  * ApeSwapFinance 
  * App:             https://apeswap.finance
- * Medium:          https://ape-swap.medium.com/    
+ * Medium:          https://ape-swap.medium.com    
  * Twitter:         https://twitter.com/ape_swap 
  * Telegram:        https://t.me/ape_swap
  * Announcements:   https://t.me/ape_swap_news
@@ -120,7 +120,7 @@ contract ApeRouter is IApeRouter02 {
         uint deadline
     ) public virtual override ensure(deadline) returns (uint amountA, uint amountB) {
         address pair = ApeLibrary.pairFor(factory, tokenA, tokenB);
-        IApePair(pair).transferFrom(msg.sender, pair, liquidity); // send liquidity to pair
+        TransferHelper.safeTransferFrom(pair, msg.sender, pair, liquidity); // send liquidity to pair
         (uint amount0, uint amount1) = IApePair(pair).burn(to);
         (address token0,) = ApeLibrary.sortTokens(tokenA, tokenB);
         (amountA, amountB) = tokenA == token0 ? (amount0, amount1) : (amount1, amount0);
