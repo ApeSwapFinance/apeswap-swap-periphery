@@ -1,7 +1,5 @@
-const HDWalletProvider = require('truffle-hdwallet-provider');
-const fs = require('fs');
-const mnemonic = fs.readFileSync(".secret").toString().trim();
-const mnemonicTestnet = fs.readFileSync(".secret-testnet").toString().trim();
+const HDWalletProvider = require('@truffle/hdwallet-provider');
+require('dotenv').config();
 
 module.exports = {
   networks: {
@@ -11,25 +9,48 @@ module.exports = {
       network_id: "*",       // Any network (default: none)
     },
     testnet: {
-      provider: () => new HDWalletProvider(mnemonicTestnet, `https://data-seed-prebsc-1-s1.binance.org:8545`, 0, 10),
+      provider: () => new HDWalletProvider(process.env.BSC_TESTNET_DEPLOYER_KEY, `https://data-seed-prebsc-1-s1.binance.org:8545`, 0,10),
       network_id: 97,
+      confirmations: 2,
+      timeoutBlocks: 200,
+      skipDryRun: true,
+      from: '0xE375D169F8f7bC18a544a6e5e546e63AD7511581'
+    },
+    bsc: {
+      provider: () => new HDWalletProvider(process.env.BSC_DEPLOYER_KEY, `https://bsc-dataseed1.binance.org`),
+      network_id: 56,
       confirmations: 2,
       timeoutBlocks: 200,
       skipDryRun: true
     },
-    bsc: {
-      provider: () => new HDWalletProvider(mnemonic, `https://bsc-dataseed1.binance.org`),
-      network_id: 56,
-      confirmations: 10,
+    polygon: {
+      provider: () => new HDWalletProvider(process.env.POLYGON_DEPLOYER_KEY, `https://rpc-mainnet.matic.network`),
+      network_id: 137,
+      confirmations: 2,
+      timeoutBlocks: 200,
+      skipDryRun: true
+    },
+    polygonTestnet: {
+      provider: () => new HDWalletProvider(process.env.POLYGON_TESTNET_DEPLOYER_KEY, `https://rpc-mumbai.matic.today`),
+      network_id: 80001,
+      confirmations: 2,
       timeoutBlocks: 200,
       skipDryRun: true
     },
   },
-
+  plugins: [
+    'truffle-plugin-verify'
+  ],
+  api_keys: {
+    // Add BSCSCAN_API_KEY in .env file to verify contracts deployed through truffle
+    etherscan: process.env.BSCSCAN_API_KEY
+  },
   // Set default mocha options here, use special reporters etc.
   mocha: {
     // timeout: 100000
   },
+
+  // Configure your compilers
   compilers: {
     solc: {
       //https://forum.openzeppelin.com/t/how-to-deploy-uniswapv2-on-ganache/3885
