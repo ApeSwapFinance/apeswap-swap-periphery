@@ -17,9 +17,12 @@
     "precompile": "yarn clean",
     "compile": "waffle .waffle.json",
     "compile:truffle": "truffle compile",
+    "migrate:bsc": "truffle migrate --network bsc",
+    "verify:bsc": "truffle run verify ApeRouter --network bsc",
     "migrate:testnet": "truffle migrate --network testnet",
     "migrate:dev": "truffle migrate --network development",
     "flatten": "truffle-flattener ./contracts/ApeRouter.sol --output ./ApeRouter_flat.sol",
+    "solt": "solt write ./contracts/ApeRouter.sol --npm --runs 999999 --output ./ApeRouter_stanardinput.json",
     "pretest": "yarn compile",
     "test": "mocha",
     "prepublishOnly": "yarn test"
