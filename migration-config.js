@@ -15,7 +15,7 @@ function getNetworkConfig(network, accounts) {
         console.log(`Deploying with ${network} config.`)
         return {
             factoryAddress: '0x804962FAc9268A54dF121f129C4a21d7c0aD70b7',
-            wrappedAddress: '0x'
+            wrappedAddress: '0x0000000000000000000000000000000000000000'
         }
     } else if (['polygon', 'polygon-fork'].includes(network)) {
         console.log(`Deploying with ${network} config.`)
