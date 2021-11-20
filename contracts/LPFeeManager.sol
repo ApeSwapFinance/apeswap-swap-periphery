@@ -2,6 +2,7 @@
 
 pragma solidity =0.6.6;
 
+// import '@apeswapfinance/contracts/utils/Sweeper.sol';
 import './interfaces/IApeRouter02.sol';
 import './interfaces/IApeFactory.sol';
 import './interfaces/IApePair.sol';
@@ -12,25 +13,38 @@ import '@openzeppelin/contracts/access/Ownable.sol';
 /// @author Apeswap.finance
 /// @notice Swap LP token fees collected to different token
 contract LPFeeManager is Ownable {
-    address[] possiblePaths;
-    IApeRouter02 router;
-    IApeFactory factory;
+    uint256 public MAX_SLIPPAGE_FACTOR = 100;
+
+    address public adminAddress;
+    address[] public possiblePaths;
+    IApeRouter02 public router;
+    IApeFactory public factory;
 
     uint256 public slippageFactor; //divided by 1000
 
     event ChangedPossiblePaths(address[] _paths);
     event LiquidityTokensSwapped(address[] _lpTokens, address _outputToken, address _to);
+    event ChangedSlippage(uint256 previousSlippage, uint256 newSlippage);
+
+    modifier onlyAdmin() {
+        require(msg.sender == adminAddress, 'not called by admin');
+        _;
+    }
 
     constructor(
         address[] memory _possiblePaths,
         address _router,
         address _factory,
-        uint256 _slippageFactor
+        uint256 _slippageFactor,
+        address _admin
     ) public {
         possiblePaths = _possiblePaths;
         router = IApeRouter02(_router);
         factory = IApeFactory(_factory);
         slippageFactor = _slippageFactor;
+
+        require(_admin != address(0), 'Admin is the zero address');
+        adminAddress = _admin;
     }
 
     /// @notice Swap LP token fees collected to different token
@@ -41,7 +55,7 @@ contract LPFeeManager is Ownable {
         address[] memory _lpTokens,
         address _outputToken,
         address _to
-    ) public onlyOwner {
+    ) public onlyAdmin {
         for (uint256 i = 0; i < _lpTokens.length; i++) {
             _swapLiquidityToken(_lpTokens[i], _outputToken, _to);
         }
@@ -140,22 +154,39 @@ contract LPFeeManager is Ownable {
         );
     }
 
-    /// @notice Change possible paths
-    /// @param _possiblePaths new list of possible paths
-    function changePossiblePaths(address[] memory _possiblePaths) public onlyOwner {
-        possiblePaths = _possiblePaths;
-        emit ChangedPossiblePaths(_possiblePaths);
+    /// @notice Add possible path
+    /// @param _possiblePath new possible path
+    function addPossiblePath(address _possiblePath) public onlyAdmin {
+        possiblePaths.push(_possiblePath);
+        emit ChangedPossiblePaths(possiblePaths);
     }
 
     /// @notice Change possible paths
-    /// @param _slippage new slippage factor
-    function changeSlippage(uint256 _slippage) public onlyOwner {
+    /// @param _possiblePaths New list of possible paths
+    function changePossiblePaths(address[] memory _possiblePaths) public onlyAdmin {
+        possiblePaths = _possiblePaths;
+        emit ChangedPossiblePaths(possiblePaths);
+    }
+
+    /// @notice Change possible paths
+    /// @param _slippage New slippage factor
+    function changeSlippage(uint256 _slippage) public onlyAdmin {
+        require(_slippage < MAX_SLIPPAGE_FACTOR, 'slippage too high');
+        emit ChangedSlippage(slippageFactor, _slippage);
         slippageFactor = _slippage;
     }
 
-    /// @notice Sweep native coin
-    /// @param _to address the native coins should be transferred to
-    function sweepNative(address payable _to) public onlyOwner {
-        _to.transfer(address(this).balance);
+    /// @notice Change admin
+    /// @param _newAdmin New admin address
+    function changeAdmin(address _newAdmin) public virtual onlyAdmin {
+        require(_newAdmin != address(0), 'New admin is the zero address');
+        emit OwnershipTransferred(adminAddress, _newAdmin);
+        adminAddress = _newAdmin;
     }
+
+    // /// @notice Sweep native coin
+    // /// @param _to address the native coins should be transferred to
+    // function sweepNative(address payable _to) public onlyOwner {
+    //     _to.transfer(address(this).balance);
+    // }
 }

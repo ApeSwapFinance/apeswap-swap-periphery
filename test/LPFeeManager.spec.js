@@ -54,7 +54,7 @@ describe('LPFeeManager', function () {
         await shib.mint(minter, ether("99999"));
         await shib.approve(dexRouter.address, ether("99999"), { from: minter });
 
-        feeManager = await LPFeeManager.new([busd.address, eth.address], dexRouter.address, dexFactory.address, 0);
+        feeManager = await LPFeeManager.new([busd.address, eth.address], dexRouter.address, dexFactory.address, 0, adminAddress);
 
         //Mock of liquidity provider routes
         /**
@@ -90,7 +90,7 @@ describe('LPFeeManager', function () {
     })
 
     it("Should swap lp tokens with no output", async () => {
-        await feeManager.swapLiquidityTokens([BTCBUSD.address], "0x0000000000000000000000000000000000000000", adminAddress);
+        await feeManager.swapLiquidityTokens([BTCBUSD.address], "0x0000000000000000000000000000000000000000", adminAddress, { from: adminAddress });
         btcbusdBalance = await BTCBUSD.balanceOf(feeManager.address);
         assert.equal(
             btcbusdBalance,
@@ -126,7 +126,7 @@ describe('LPFeeManager', function () {
     });
 
     it("Should swap lp tokens. BTC-BUSD -> BUSD", async () => {
-        await feeManager.swapLiquidityTokens([BTCBUSD.address], busd.address, adminAddress);
+        await feeManager.swapLiquidityTokens([BTCBUSD.address], busd.address, adminAddress, { from: adminAddress });
 
         btcbusdBalance = await BTCBUSD.balanceOf(feeManager.address);
         assert.equal(
@@ -157,7 +157,7 @@ describe('LPFeeManager', function () {
     });
 
     it("Should swap lp tokens. BTC-BUSD -> ETH", async () => {
-        await feeManager.swapLiquidityTokens([BTCBUSD.address], eth.address, adminAddress);
+        await feeManager.swapLiquidityTokens([BTCBUSD.address], eth.address, adminAddress, { from: adminAddress });
 
         btcbusdBalance = await BTCBUSD.balanceOf(feeManager.address);
         assert.equal(
@@ -188,7 +188,7 @@ describe('LPFeeManager', function () {
     });
 
     it("Should swap lp tokens. BTC-BUSD -> BNB", async () => {
-        await feeManager.swapLiquidityTokens([BTCBUSD.address], bnb.address, adminAddress);
+        await feeManager.swapLiquidityTokens([BTCBUSD.address], bnb.address, adminAddress, { from: adminAddress });
 
         btcbusdBalance = await BTCBUSD.balanceOf(feeManager.address);
         assert.equal(
@@ -219,7 +219,7 @@ describe('LPFeeManager', function () {
     });
 
     it("Should swap lp tokens. BTC-BUSD + BTC-ETH -> BUSD", async () => {
-        await feeManager.swapLiquidityTokens([BTCBUSD.address, BTCETH.address], busd.address, adminAddress);
+        await feeManager.swapLiquidityTokens([BTCBUSD.address, BTCETH.address], busd.address, adminAddress, { from: adminAddress });
 
         btcbusdBalance = await BTCBUSD.balanceOf(feeManager.address);
         assert.equal(
@@ -262,6 +262,17 @@ describe('LPFeeManager', function () {
     });
 
     it("Should FAIL swap lp tokens. SHIB-BUSD -> BNB", async () => {
-        await expectRevert(feeManager.swapLiquidityTokens([SHIBBUSD.address], bnb.address, adminAddress), "No path found");
+        await expectRevert(feeManager.swapLiquidityTokens([SHIBBUSD.address], bnb.address, adminAddress, { from: adminAddress }), "No path found",);
+    });
+
+    it("Should add new path", async () => {
+        await feeManager.addPossiblePath(shib.address, { from: adminAddress });
+
+        const newPath = await feeManager.possiblePaths(2);
+        assert.equal(
+            newPath,
+            shib.address,
+            'New path not correctly added'
+        );
     });
 });
