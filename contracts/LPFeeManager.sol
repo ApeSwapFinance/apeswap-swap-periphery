@@ -1,18 +1,17 @@
 // SPDX-License-Identifier: MIT
-
 pragma solidity =0.6.6;
+pragma experimental ABIEncoderV2;
 
 // import '@apeswapfinance/contracts/utils/Sweeper.sol';
 import './interfaces/IApeRouter02.sol';
 import './interfaces/IApeFactory.sol';
 import './interfaces/IApePair.sol';
-import './interfaces/IERC20.sol';
-import '@openzeppelin/contracts/access/Ownable.sol';
+import './utils/Sweeper.sol';
 
 /// @title LP fee manager
 /// @author Apeswap.finance
 /// @notice Swap LP token fees collected to different token
-contract LPFeeManager is Ownable {
+contract LPFeeManager is Sweeper {
     uint256 public MAX_SLIPPAGE_FACTOR = 100;
 
     address public adminAddress;
@@ -36,8 +35,10 @@ contract LPFeeManager is Ownable {
         address _router,
         address _factory,
         uint256 _slippageFactor,
-        address _admin
-    ) public {
+        address _admin,
+        address[] memory _lockedTokens,
+        bool _allowNativeSweep
+    ) public Sweeper(_lockedTokens, _allowNativeSweep) {
         possiblePaths = _possiblePaths;
         router = IApeRouter02(_router);
         factory = IApeFactory(_factory);

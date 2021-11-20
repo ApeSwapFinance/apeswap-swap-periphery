@@ -54,7 +54,7 @@ describe('LPFeeManager', function () {
         await shib.mint(minter, ether("99999"));
         await shib.approve(dexRouter.address, ether("99999"), { from: minter });
 
-        feeManager = await LPFeeManager.new([busd.address, eth.address], dexRouter.address, dexFactory.address, 0, adminAddress);
+        feeManager = await LPFeeManager.new([busd.address, eth.address], dexRouter.address, dexFactory.address, 0, adminAddress, [], true);
 
         //Mock of liquidity provider routes
         /**
