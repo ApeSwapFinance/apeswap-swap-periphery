@@ -2,7 +2,6 @@
 pragma solidity =0.6.6;
 pragma experimental ABIEncoderV2;
 
-// import '@apeswapfinance/contracts/utils/Sweeper.sol';
 import './interfaces/IApeRouter02.sol';
 import './interfaces/IApeFactory.sol';
 import './interfaces/IApePair.sol';
