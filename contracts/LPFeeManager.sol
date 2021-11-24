@@ -11,7 +11,7 @@ import './utils/Sweeper.sol';
 /// @author Apeswap.finance
 /// @notice Swap LP token fees collected to different token
 contract LPFeeManager is Sweeper {
-    uint256 public MAX_SLIPPAGE_FACTOR = 100;
+    uint256 public MAX_SLIPPAGE_FACTOR = 1000;
 
     address public adminAddress;
     address[] public possiblePaths;
@@ -183,10 +183,4 @@ contract LPFeeManager is Sweeper {
         emit OwnershipTransferred(adminAddress, _newAdmin);
         adminAddress = _newAdmin;
     }
-
-    // /// @notice Sweep native coin
-    // /// @param _to address the native coins should be transferred to
-    // function sweepNative(address payable _to) public onlyOwner {
-    //     _to.transfer(address(this).balance);
-    // }
 }
