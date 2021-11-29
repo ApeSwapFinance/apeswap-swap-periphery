@@ -2,8 +2,8 @@ function getNetworkConfig(network, accounts) {
     if(["bsc", "bsc-fork"].includes(network)) {
         console.log(`Deploying with ${network} config.`)
         return {
-            factoryAddress: '0x',
-            wrappedAddress: '0x'
+            factoryAddress: '0x0841BD0B734E4F5853f0dD8d7Ea041c241fb0Da6',
+            wrappedAddress: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c'
         }
     } else if (['testnet', 'testnet-fork'].includes(network)) {
         console.log(`Deploying with ${network} config.`)
