@@ -24,7 +24,8 @@
     "migrate:dev": "truffle migrate --network development",
     "flatten": "truffle-flattener ./contracts/ApeRouter.sol --output ./ApeRouter_flat.sol",
     "solt": "solt write ./contracts/ApeRouter.sol --npm --runs 999999 --output ./ApeRouter_stanardinput.json",
-    "test": "mocha",
+    "test": "yarn compile:truffle && mocha",
+    "test:fast": "mocha",
     "prepublishOnly": "yarn test"
   },
   "files": [
