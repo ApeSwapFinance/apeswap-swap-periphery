@@ -1,4 +1,4 @@
-const { balance, expectRevert, time, ether, BN } = require('@openzeppelin/test-helpers');
+const { balance, expectRevert, time, ether, BN, expectEvent } = require('@openzeppelin/test-helpers');
 const { accounts, contract } = require('@openzeppelin/test-environment');
 const { expect, assert } = require('chai');
 const { getNetworkConfig } = require("../migration-config.js");
@@ -54,7 +54,7 @@ describe('LPFeeManager', function () {
         await shib.mint(minter, ether("99999"));
         await shib.approve(dexRouter.address, ether("99999"), { from: minter });
 
-        feeManager = await LPFeeManager.new([busd.address, eth.address], dexRouter.address, dexFactory.address, 0, adminAddress, [], true);
+        feeManager = await LPFeeManager.new([busd.address, eth.address], dexRouter.address, 0, adminAddress, [], true);
 
         //Mock of liquidity provider routes
         /**
@@ -262,7 +262,8 @@ describe('LPFeeManager', function () {
     });
 
     it("Should FAIL swap lp tokens. SHIB-BUSD -> BNB", async () => {
-        await expectRevert(feeManager.swapLiquidityTokens([SHIBBUSD.address], bnb.address, adminAddress, { from: adminAddress }), "No path found",);
+        const receipt = await feeManager.swapLiquidityTokens([SHIBBUSD.address], bnb.address, adminAddress, { from: adminAddress });
+        expectEvent(receipt, 'NoPathFound');
     });
 
     it("Should add new path", async () => {

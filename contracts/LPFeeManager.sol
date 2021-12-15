@@ -20,6 +20,7 @@ contract LPFeeManager is Sweeper {
 
     uint256 public slippageFactor; //divided by 1000
 
+    event NoPathFound(address indexed inputToken, address indexed outputToken);
     event ChangedPossiblePaths(address[] _paths);
     event LiquidityTokensSwapped(address[] _lpTokens, address _outputToken, address _to);
     event ChangedSlippage(uint256 previousSlippage, uint256 newSlippage);
@@ -32,7 +33,6 @@ contract LPFeeManager is Sweeper {
     constructor(
         address[] memory _possiblePaths,
         address _router,
-        address _factory,
         uint256 _slippageFactor,
         address _admin,
         address[] memory _lockedTokens,
@@ -40,7 +40,7 @@ contract LPFeeManager is Sweeper {
     ) public Sweeper(_lockedTokens, _allowNativeSweep) {
         possiblePaths = _possiblePaths;
         router = IApeRouter02(_router);
-        factory = IApeFactory(_factory);
+        factory = IApeFactory(router.factory());
         slippageFactor = _slippageFactor;
 
         require(_admin != address(0), 'Admin is the zero address');
@@ -116,7 +116,12 @@ contract LPFeeManager is Sweeper {
                     break;
                 }
             }
-            require(path[0] == _token, 'No path found');
+
+            if(path[0] != _token) {
+                emit NoPathFound(_token, _outputToken);
+                /// @dev no path found, skipping output tokens
+                return;
+            }
 
             IERC20 token = IERC20(_token);
             uint256 amountIn = token.balanceOf(address(this));
