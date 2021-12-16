@@ -2,7 +2,7 @@
 import { Interface } from '@ethersproject/abi'
 import { Contract } from '@ethersproject/contracts'
 
-export function chunkArray(arr: any[], len: number) {
+export function chunkArray(arr: any[], len: number): any[][] {
     let chunks = [];
     let i = 0;
     let n = arr.length;
@@ -20,7 +20,7 @@ export interface Call {
     params?: any[] // Function params
 }
 
-export async function multicall(multi: Contract, abi: any[], calls: Call[], maxCallsPerTx = 1000) {
+export async function multicall(multi: Contract, abi: any[], calls: Call[], maxCallsPerTx = 1000): Promise<any[]> {
     const itf = new Interface(abi)
 
     const chunkedCalls = chunkArray(calls, maxCallsPerTx);
