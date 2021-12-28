@@ -16,7 +16,7 @@ export function chunkArray(arr: any[], len: number): any[][] {
 
 export interface Call {
     address: string // Address of the contract
-    functionName: string // Function name on the contract (exemple: balanceOf)
+    functionName: string // Function name on the contract (example: balanceOf)
     params?: any[] // Function params
 }
 
