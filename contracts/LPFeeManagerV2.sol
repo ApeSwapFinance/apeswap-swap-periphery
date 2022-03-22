@@ -7,6 +7,7 @@ import './interfaces/IApeFactory.sol';
 import './interfaces/IApePair.sol';
 import './utils/Sweeper.sol';
 
+
 /// @title LP fee manager
 /// @author Apeswap.finance
 /// @notice Swap LP token fees collected to different token
@@ -55,6 +56,7 @@ contract LPFeeManagerV2 is Sweeper {
 
         for (uint256 i = 0; i < _lpTokens.length; i++) {
             IApePair pair = IApePair(_lpTokens[i]);
+            pair.approve(address(router), _amounts[i]);
             try
                 router.removeLiquidity(
                     pair.token0(),
@@ -64,7 +66,7 @@ contract LPFeeManagerV2 is Sweeper {
                     _token1Outs[i],
                     toAddress,
                     block.timestamp + 600
-                )
+                ) returns (uint amountA, uint amountB)
             {
                 emit LiquidityRemoved(address(pair));
             } catch {
@@ -78,15 +80,17 @@ contract LPFeeManagerV2 is Sweeper {
     /// @param _amountOuts Array of amount outs
     /// @param _paths path to follow for swapping
     /// @param _to address the tokens need to be transferred to.
-    function _safeSwap(
+    function swapTokens(
         uint256[] memory _amountIns,
         uint256[] memory _amountOuts,
         address[][] memory _paths,
         address _to
-    ) internal virtual {
+    ) public onlyAdmin virtual {
         address toAddress = _to == address(0) ? address(this) : _to;
 
         for (uint256 i = 0; i < _amountIns.length; i++) {
+            IERC20 token = IERC20(_paths[i][0]);
+            token.approve(address(router), _amountIns[i]);
             try
                 router.swapExactTokensForTokens(
                     _amountIns[i],
