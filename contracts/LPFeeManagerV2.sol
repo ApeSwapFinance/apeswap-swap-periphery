@@ -15,22 +15,18 @@ contract LPFeeManagerV2 is Sweeper {
     IApeRouter02 public router;
     IApeFactory public factory;
 
-    event LiquidityRemoved(address indexed pairAddress);
+    event LiquidityRemoved(address indexed pairAddress, uint256 amountA, uint256 amountB);
     event LiquidityRemovalFailed(address indexed pairAddress);
     event Swap(uint256 amountIn, uint256 amountOut, address[] path);
     event SwapFailed(uint256 amountIn, uint256 amountOut, address[] path);
 
     constructor(
         address _router,
-        address _admin,
         address[] memory _lockedTokens,
         bool _allowNativeSweep
     ) public Sweeper(_lockedTokens, _allowNativeSweep) {
         router = IApeRouter02(_router);
         factory = IApeFactory(router.factory());
-
-        require(_admin != address(0), 'Admin is the zero address');
-        adminAddress = _admin;
     }
 
     /// @notice Remove LP and unwrap to base tokens
@@ -51,8 +47,7 @@ contract LPFeeManagerV2 is Sweeper {
         for (uint256 i = 0; i < _lpTokens.length; i++) {
             IApePair pair = IApePair(_lpTokens[i]);
             pair.approve(address(router), _amounts[i]);
-            try
-                router.removeLiquidity(
+            try router.removeLiquidity(
                     pair.token0(),
                     pair.token1(),
                     _amounts[i],
@@ -60,9 +55,9 @@ contract LPFeeManagerV2 is Sweeper {
                     _token1Outs[i],
                     toAddress,
                     block.timestamp + 600
-                ) returns (uint amountA, uint amountB)
+                ) returns (uint256 amountA, uint256 amountB) 
             {
-                emit LiquidityRemoved(address(pair));
+                emit LiquidityRemoved(address(pair), amountA, amountB);
             } catch {
                 emit LiquidityRemovalFailed(address(pair));
             }
@@ -99,13 +94,5 @@ contract LPFeeManagerV2 is Sweeper {
                 emit SwapFailed(_amountIns[i], _amountOuts[i], _paths[i]);
             }
         }
-    }
-
-    /// @notice Change admin
-    /// @param _newAdmin New admin address
-    function changeAdmin(address _newAdmin) public virtual onlyOwner {
-        require(_newAdmin != address(0), 'New admin is the zero address');
-        emit OwnershipTransferred(adminAddress, _newAdmin);
-        adminAddress = _newAdmin;
     }
 }
