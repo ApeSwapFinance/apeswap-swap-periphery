@@ -12,7 +12,6 @@ import './utils/Sweeper.sol';
 /// @author Apeswap.finance
 /// @notice Swap LP token fees collected to different token
 contract LPFeeManagerV2 is Sweeper {
-    address public adminAddress;
     IApeRouter02 public router;
     IApeFactory public factory;
 
@@ -20,11 +19,6 @@ contract LPFeeManagerV2 is Sweeper {
     event LiquidityRemovalFailed(address indexed pairAddress);
     event Swap(uint256 amountIn, uint256 amountOut, address[] path);
     event SwapFailed(uint256 amountIn, uint256 amountOut, address[] path);
-
-    modifier onlyAdmin() {
-        require(msg.sender == adminAddress, 'not called by admin');
-        _;
-    }
 
     constructor(
         address _router,
@@ -51,7 +45,7 @@ contract LPFeeManagerV2 is Sweeper {
         uint256[] memory _token0Outs,
         uint256[] memory _token1Outs,
         address _to
-    ) public onlyAdmin {
+    ) public onlyOwner {
         address toAddress = _to == address(0) ? address(this) : _to;
 
         for (uint256 i = 0; i < _lpTokens.length; i++) {
@@ -85,7 +79,7 @@ contract LPFeeManagerV2 is Sweeper {
         uint256[] memory _amountOuts,
         address[][] memory _paths,
         address _to
-    ) public onlyAdmin virtual {
+    ) public onlyOwner virtual {
         address toAddress = _to == address(0) ? address(this) : _to;
 
         for (uint256 i = 0; i < _amountIns.length; i++) {
@@ -109,7 +103,7 @@ contract LPFeeManagerV2 is Sweeper {
 
     /// @notice Change admin
     /// @param _newAdmin New admin address
-    function changeAdmin(address _newAdmin) public virtual onlyAdmin {
+    function changeAdmin(address _newAdmin) public virtual onlyOwner {
         require(_newAdmin != address(0), 'New admin is the zero address');
         emit OwnershipTransferred(adminAddress, _newAdmin);
         adminAddress = _newAdmin;
