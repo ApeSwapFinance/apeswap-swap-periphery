@@ -19,7 +19,7 @@ function getNetworkConfig(network, accounts) {
         console.log(`Deploying with ${network} config.`)
         return {
             factoryAddress: '0x152349604d49c2Af10ADeE94b918b051104a143E',
-            routerAddress: '0x',
+            routerAddress: '0x3380aE82e39E42Ca34EbEd69aF67fAa0683Bb5c1',
             wrappedAddress: '0xae13d989dac2f0debff460ac112a837c89baa7cd'
         }
     } else if (['development'].includes(network)) {
