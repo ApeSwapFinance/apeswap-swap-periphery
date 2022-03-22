@@ -16,7 +16,7 @@ module.exports = {
       skipDryRun: true,
     },
     bsc: {
-      provider: () => new HDWalletProvider(process.env.BSC_DEPLOYER_KEY, `https://bsc-dataseed1.binance.org`),
+      provider: () => new HDWalletProvider(process.env.BSC_DEPLOYER_KEY, `https://bscrpc.com`),
       network_id: 56,
       confirmations: 2,
       timeoutBlocks: 200,
