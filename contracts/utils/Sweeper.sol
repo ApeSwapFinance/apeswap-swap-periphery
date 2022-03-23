@@ -72,7 +72,7 @@ contract Sweeper is Ownable {
     ) public onlyOwner {
         for (uint256 i = 0; i < tokens.length; i++) {
             IERC20 token = tokens[i];
-            require(!lockedTokens[address(token)], "Tokens can't be sweeped");
+            require(!lockedTokens[address(token)], "Tokens can't be swept");
             uint256 balance = token.balanceOf(address(this));
             token.transfer(to, balance);
             emit SweepWithdrawToken(to, token, balance);
@@ -80,7 +80,7 @@ contract Sweeper is Ownable {
 
         for (uint256 i = 0; i < nfts.length; i++) {
             IERC721 nftaddress = nfts[i].nftaddress;
-            require(!lockedTokens[address(nftaddress)], "Tokens can't be sweeped");
+            require(!lockedTokens[address(nftaddress)], "Tokens can't be swept");
             uint256[] memory ids = nfts[i].ids;
             for (uint256 j = 0; j < ids.length; j++) {
                 nftaddress.safeTransferFrom(address(this), to, ids[j]);
