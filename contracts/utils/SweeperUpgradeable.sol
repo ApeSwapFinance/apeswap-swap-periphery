@@ -12,7 +12,7 @@ pragma experimental ABIEncoderV2;
  * GitHub:          https://github.com/ApeSwapFinance
  */
 
-import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 
@@ -21,7 +21,7 @@ import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
  * Sometimes people accidentally send tokens to a contract without any way to retrieve them.
  * This contract makes sure any erc20 tokens can be removed from the contract.
  */
-contract SweeperUpgradeable is Ownable {
+contract SweeperUpgradeable is OwnableUpgradeable {
     struct NFT {
         IERC721 nftaddress;
         uint256[] ids;

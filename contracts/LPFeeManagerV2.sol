@@ -6,13 +6,11 @@ import './interfaces/IApeRouter02.sol';
 import './interfaces/IApeFactory.sol';
 import './interfaces/IApePair.sol';
 import './utils/SweeperUpgradeable.sol';
-import "@openzeppelin/contracts/proxy/Initializable.sol";
-
 
 /// @title LP fee manager
 /// @author ApeSwap.finance
 /// @notice Swap LP token fees collected to different token
-contract LPFeeManagerV2 is SweeperUpgradeable, Initializable {
+contract LPFeeManagerV2 is SweeperUpgradeable {
     IApeRouter02 public router;
     IApeFactory public factory;
 
@@ -24,6 +22,7 @@ contract LPFeeManagerV2 is SweeperUpgradeable, Initializable {
     function initialize(
         address _router
     ) external initializer {
+        __Ownable_init();
         router = IApeRouter02(_router);
         factory = IApeFactory(router.factory());
         // Setup Sweeper to allow native withdraws
