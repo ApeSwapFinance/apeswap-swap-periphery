@@ -7,9 +7,8 @@ import './interfaces/IApeFactory.sol';
 import './interfaces/IApePair.sol';
 import './utils/Sweeper.sol';
 
-
 /// @title LP fee manager
-/// @author Apeswap.finance
+/// @author ApeSwap.finance
 /// @notice Swap LP token fees collected to different token
 contract LPFeeManagerV2 is Sweeper {
     IApeRouter02 public router;
@@ -35,19 +34,22 @@ contract LPFeeManagerV2 is Sweeper {
     /// @param _token0Outs Minimum token 0 output requested.
     /// @param _token1Outs Minimum token 1 output requested.
     /// @param _to address the tokens need to be transferred to.
+    /// @param _revertOnFailure If false, the tx will not revert on liquidity removal failures
     function removeLiquidityTokens(
         address[] memory _lpTokens,
         uint256[] memory _amounts,
         uint256[] memory _token0Outs,
         uint256[] memory _token1Outs,
-        address _to
+        address _to,
+        bool _revertOnFailure
     ) public onlyOwner {
         address toAddress = _to == address(0) ? address(this) : _to;
 
         for (uint256 i = 0; i < _lpTokens.length; i++) {
             IApePair pair = IApePair(_lpTokens[i]);
             pair.approve(address(router), _amounts[i]);
-            try router.removeLiquidity(
+            try
+                router.removeLiquidity(
                     pair.token0(),
                     pair.token1(),
                     _amounts[i],
@@ -55,11 +57,15 @@ contract LPFeeManagerV2 is Sweeper {
                     _token1Outs[i],
                     toAddress,
                     block.timestamp + 600
-                ) returns (uint256 amountA, uint256 amountB) 
-            {
+                )
+            returns (uint256 amountA, uint256 amountB) {
                 emit LiquidityRemoved(address(pair), amountA, amountB);
             } catch {
-                emit LiquidityRemovalFailed(address(pair));
+                if (_revertOnFailure) {
+                    revert('failed to remove liquidity');
+                } else {
+                    emit LiquidityRemovalFailed(address(pair));
+                }
             }
         }
     }
@@ -69,12 +75,14 @@ contract LPFeeManagerV2 is Sweeper {
     /// @param _amountOuts Array of amount outs
     /// @param _paths path to follow for swapping
     /// @param _to address the tokens need to be transferred to.
+    /// @param _revertOnFailure If false, the tx will not revert on swap failures
     function swapTokens(
         uint256[] memory _amountIns,
         uint256[] memory _amountOuts,
         address[][] memory _paths,
-        address _to
-    ) public onlyOwner virtual {
+        address _to,
+        bool _revertOnFailure
+    ) public virtual onlyOwner {
         address toAddress = _to == address(0) ? address(this) : _to;
 
         for (uint256 i = 0; i < _amountIns.length; i++) {
@@ -91,7 +99,11 @@ contract LPFeeManagerV2 is Sweeper {
             {
                 emit Swap(_amountIns[i], _amountOuts[i], _paths[i]);
             } catch {
-                emit SwapFailed(_amountIns[i], _amountOuts[i], _paths[i]);
+                if (_revertOnFailure) {
+                    revert('failed to swap tokens');
+                } else {
+                    emit SwapFailed(_amountIns[i], _amountOuts[i], _paths[i]);
+                }
             }
         }
     }
