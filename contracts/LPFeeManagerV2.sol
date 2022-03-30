@@ -5,12 +5,14 @@ pragma experimental ABIEncoderV2;
 import './interfaces/IApeRouter02.sol';
 import './interfaces/IApeFactory.sol';
 import './interfaces/IApePair.sol';
-import './utils/Sweeper.sol';
+import './utils/SweeperUpgradeable.sol';
+import "@openzeppelin/contracts/proxy/Initializable.sol";
+
 
 /// @title LP fee manager
 /// @author ApeSwap.finance
 /// @notice Swap LP token fees collected to different token
-contract LPFeeManagerV2 is Sweeper {
+contract LPFeeManagerV2 is SweeperUpgradeable, Initializable {
     IApeRouter02 public router;
     IApeFactory public factory;
 
@@ -19,13 +21,13 @@ contract LPFeeManagerV2 is Sweeper {
     event Swap(uint256 amountIn, uint256 amountOut, address[] path);
     event SwapFailed(uint256 amountIn, uint256 amountOut, address[] path);
 
-    constructor(
-        address _router,
-        address[] memory _lockedTokens,
-        bool _allowNativeSweep
-    ) public Sweeper(_lockedTokens, _allowNativeSweep) {
+    function initialize(
+        address _router
+    ) external initializer {
         router = IApeRouter02(_router);
         factory = IApeFactory(router.factory());
+        // Setup Sweeper to allow native withdraws
+        allowNativeSweep = true;
     }
 
     /// @notice Remove LP and unwrap to base tokens
