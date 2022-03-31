@@ -46,7 +46,7 @@
     "ethers": "^5.3.0",
     "truffle": "^5.1.65",
     "truffle-flattener": "^1.5.0",
-    "truffle-plugin-verify": "^0.4.0"
+    "truffle-plugin-verify": "^0.5.24"
   },
   "devDependencies": {
     "@types/chai": "^4.2.6",
