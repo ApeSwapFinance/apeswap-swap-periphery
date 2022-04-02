@@ -37,13 +37,13 @@ contract LPFeeManagerV2 is SweeperUpgradeable {
     /// @param _to address the tokens need to be transferred to.
     /// @param _revertOnFailure If false, the tx will not revert on liquidity removal failures
     function removeLiquidityTokens(
-        address[] memory _lpTokens,
-        uint256[] memory _amounts,
-        uint256[] memory _token0Outs,
-        uint256[] memory _token1Outs,
+        address[] calldata _lpTokens,
+        uint256[] calldata _amounts,
+        uint256[] calldata _token0Outs,
+        uint256[] calldata _token1Outs,
         address _to,
         bool _revertOnFailure
-    ) public onlyOwner {
+    ) external onlyOwner {
         address toAddress = _to == address(0) ? address(this) : _to;
 
         for (uint256 i = 0; i < _lpTokens.length; i++) {
@@ -78,12 +78,12 @@ contract LPFeeManagerV2 is SweeperUpgradeable {
     /// @param _to address the tokens need to be transferred to.
     /// @param _revertOnFailure If false, the tx will not revert on swap failures
     function swapTokens(
-        uint256[] memory _amountIns,
-        uint256[] memory _amountOuts,
-        address[][] memory _paths,
+        uint256[] calldata _amountIns,
+        uint256[] calldata _amountOuts,
+        address[][] calldata _paths,
         address _to,
         bool _revertOnFailure
-    ) public virtual onlyOwner {
+    ) external onlyOwner {
         address toAddress = _to == address(0) ? address(this) : _to;
 
         for (uint256 i = 0; i < _amountIns.length; i++) {
