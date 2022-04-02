@@ -6,7 +6,7 @@ function getNetworkConfig(network, accounts) {
             routerAddress: '0xcF0feBd3f17CEf5b47b0cD257aCf6025c5BFf3b7',
             wrappedAddress: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
             feeAddress: '0x94bfE225859347f2B2dd7EB8CBF35B84b4e8Df69',
-            liquidityHelper: '0xC40D5C9431A870F58a663C6802D17E49d6c8ac77',
+            liquidityHelper: '0x7BfCD7d5D95b7ce2C4CF30D9e0aB535eD5D34968',
             multicall: '0xC50F4c1E81c873B2204D7eFf7069Ffec6Fbe136D',
             slippageFactor: 20, // Divided by 1000
             baseRoutes: [
