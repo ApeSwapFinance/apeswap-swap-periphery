@@ -2,10 +2,10 @@
 pragma solidity =0.6.6;
 pragma experimental ABIEncoderV2;
 
-import './interfaces/IApeRouter02.sol';
-import './interfaces/IApeFactory.sol';
-import './interfaces/IApePair.sol';
-import './utils/Sweeper.sol';
+import '../interfaces/IApeRouter02.sol';
+import '../interfaces/IApeFactory.sol';
+import '../interfaces/IApePair.sol';
+import '../utils/Sweeper.sol';
 
 /// @title LP fee manager
 /// @author Apeswap.finance
