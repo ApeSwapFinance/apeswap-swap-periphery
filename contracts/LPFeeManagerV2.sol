@@ -5,12 +5,12 @@ pragma experimental ABIEncoderV2;
 import './interfaces/IApeRouter02.sol';
 import './interfaces/IApeFactory.sol';
 import './interfaces/IApePair.sol';
-import './utils/Sweeper.sol';
+import './utils/SweeperUpgradeable.sol';
 
 /// @title LP fee manager
 /// @author ApeSwap.finance
 /// @notice Swap LP token fees collected to different token
-contract LPFeeManagerV2 is Sweeper {
+contract LPFeeManagerV2 is SweeperUpgradeable {
     IApeRouter02 public router;
     IApeFactory public factory;
 
@@ -19,13 +19,14 @@ contract LPFeeManagerV2 is Sweeper {
     event Swap(uint256 amountIn, uint256 amountOut, address[] path);
     event SwapFailed(uint256 amountIn, uint256 amountOut, address[] path);
 
-    constructor(
-        address _router,
-        address[] memory _lockedTokens,
-        bool _allowNativeSweep
-    ) public Sweeper(_lockedTokens, _allowNativeSweep) {
+    function initialize(
+        address _router
+    ) external initializer {
+        __Ownable_init();
         router = IApeRouter02(_router);
         factory = IApeFactory(router.factory());
+        // Setup Sweeper to allow native withdraws
+        allowNativeSweep = true;
     }
 
     /// @notice Remove LP and unwrap to base tokens
@@ -36,13 +37,13 @@ contract LPFeeManagerV2 is Sweeper {
     /// @param _to address the tokens need to be transferred to.
     /// @param _revertOnFailure If false, the tx will not revert on liquidity removal failures
     function removeLiquidityTokens(
-        address[] memory _lpTokens,
-        uint256[] memory _amounts,
-        uint256[] memory _token0Outs,
-        uint256[] memory _token1Outs,
+        address[] calldata _lpTokens,
+        uint256[] calldata _amounts,
+        uint256[] calldata _token0Outs,
+        uint256[] calldata _token1Outs,
         address _to,
         bool _revertOnFailure
-    ) public onlyOwner {
+    ) external onlyOwner {
         address toAddress = _to == address(0) ? address(this) : _to;
 
         for (uint256 i = 0; i < _lpTokens.length; i++) {
@@ -77,12 +78,12 @@ contract LPFeeManagerV2 is Sweeper {
     /// @param _to address the tokens need to be transferred to.
     /// @param _revertOnFailure If false, the tx will not revert on swap failures
     function swapTokens(
-        uint256[] memory _amountIns,
-        uint256[] memory _amountOuts,
-        address[][] memory _paths,
+        uint256[] calldata _amountIns,
+        uint256[] calldata _amountOuts,
+        address[][] calldata _paths,
         address _to,
         bool _revertOnFailure
-    ) public virtual onlyOwner {
+    ) external onlyOwner {
         address toAddress = _to == address(0) ? address(this) : _to;
 
         for (uint256 i = 0; i < _amountIns.length; i++) {
