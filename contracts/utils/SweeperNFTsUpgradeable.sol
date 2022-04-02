@@ -12,7 +12,7 @@ pragma experimental ABIEncoderV2;
  * GitHub:          https://github.com/ApeSwapFinance
  */
 
-import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 
@@ -21,7 +21,7 @@ import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
  * Sometimes people accidentally send tokens to a contract without any way to retrieve them.
  * This contract makes sure any erc20 tokens can be removed from the contract.
  */
-contract Sweeper is Ownable {
+contract SweeperUpgradeable is OwnableUpgradeable {
     struct NFT {
         IERC721 nftaddress;
         uint256[] ids;
@@ -37,11 +37,6 @@ contract Sweeper is Ownable {
         address indexed receiver,
         uint256 balance
     );
-
-    constructor(address[] memory _lockedTokens, bool _allowNativeSweep) public {
-        lockTokens(_lockedTokens);
-        allowNativeSweep = _allowNativeSweep;
-    }
 
     /**
      * @dev Transfers erc20 tokens to owner
@@ -111,7 +106,7 @@ contract Sweeper is Ownable {
      * Once locked it can't be unlocked
      */
     function lockToken(address token) public onlyOwner {
-        lockedTokens[token] = true;
+        _lockToken(token);
     }
 
     /**
@@ -119,8 +114,24 @@ contract Sweeper is Ownable {
      * Once locked it can't be unlocked
      */
     function lockTokens(address[] memory tokens) public onlyOwner {
+        _lockTokens(tokens);
+    }
+
+    /**
+     * @dev Lock single token so they can't be transferred from the contract.
+     * Once locked it can't be unlocked
+     */
+    function _lockToken(address token) internal {
+        lockedTokens[token] = true;
+    }
+
+    /**
+     * @dev Lock multiple tokens so they can't be transferred from the contract.
+     * Once locked it can't be unlocked
+     */
+    function _lockTokens(address[] memory tokens) internal {
         for (uint256 i = 0; i < tokens.length; i++) {
-            lockToken(tokens[i]);
+            _lockToken(tokens[i]);
         }
     }
 }
