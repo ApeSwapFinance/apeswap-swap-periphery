@@ -1,0 +1,192 @@
+{
+  "manifestVersion": "3.2",
+  "admin": {
+    "address": "0x1B7722871c06Acc4cfB13e7A7503eA3DEaE78Ec8",
+    "txHash": "0xc137ef8e033d35d2614f0faac5dfbf741a688ea05bede476a3343d686a61ea59"
+  },
+  "proxies": [
+    {
+      "address": "0x7BfCD7d5D95b7ce2C4CF30D9e0aB535eD5D34968",
+      "txHash": "0x1a47e33c46bcb04138ee516f99800d2b90a9b774be48d66e067d16fc91dc8e55",
+      "kind": "transparent"
+    }
+  ],
+  "impls": {
+    "2c5c8cb1c45ab59ea4745e5aa6381376ea976035dba5e8491da0f78a9badaeee": {
+      "address": "0xD907a1E985B124668a418f1C30a8c2E05f511b64",
+      "txHash": "0xd2a0eb3b5a3080d3da7a12fa5c6b2fe8d4ab1d23b6cdceaf942b8465459a97df",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/Initializable.sol:25"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/Initializable.sol:30"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:31"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "_owner",
+            "type": "t_address",
+            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:20"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:74"
+          },
+          {
+            "contract": "SweeperUpgradeable",
+            "label": "lockedTokens",
+            "type": "t_mapping(t_address,t_bool)",
+            "src": "utils/SweeperUpgradeable.sol:29"
+          },
+          {
+            "contract": "SweeperUpgradeable",
+            "label": "allowNativeSweep",
+            "type": "t_bool",
+            "src": "utils/SweeperUpgradeable.sol:30"
+          },
+          {
+            "contract": "LPFeeManagerV2",
+            "label": "router",
+            "type": "t_contract(IApeRouter02)4834",
+            "src": "LPFeeManagerV2.sol:14"
+          },
+          {
+            "contract": "LPFeeManagerV2",
+            "label": "factory",
+            "type": "t_contract(IApeFactory)4180",
+            "src": "LPFeeManagerV2.sol:15"
+          }
+        ],
+        "types": {
+          "t_contract(IApeRouter02)4834": {
+            "label": "contract IApeRouter02"
+          },
+          "t_contract(IApeFactory)4180": {
+            "label": "contract IApeFactory"
+          },
+          "t_mapping(t_address,t_bool)": {
+            "label": "mapping(address => bool)"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          }
+        }
+      }
+    },
+    "0bce16adca955b5a7b99f64e165f97aaf8b8e75f4d4f5d772765aae3f80df662": {
+      "address": "0x37495C7c456D3304f1E60C6bc9F076448728bc16",
+      "txHash": "0xa096f57bf2bb17b90049b6e37793905c7cd5c1c2a6b9bd59e9ada87aed24c25d",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/Initializable.sol:25"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/Initializable.sol:30"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:31"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "_owner",
+            "type": "t_address",
+            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:20"
+          },
+          {
+            "contract": "OwnableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:74"
+          },
+          {
+            "contract": "SweeperUpgradeable",
+            "label": "lockedTokens",
+            "type": "t_mapping(t_address,t_bool)",
+            "src": "utils/SweeperUpgradeable.sol:24"
+          },
+          {
+            "contract": "SweeperUpgradeable",
+            "label": "allowNativeSweep",
+            "type": "t_bool",
+            "src": "utils/SweeperUpgradeable.sol:25"
+          },
+          {
+            "contract": "LPFeeManagerV2",
+            "label": "router",
+            "type": "t_contract(IApeRouter02)4834",
+            "src": "LPFeeManagerV2.sol:14"
+          },
+          {
+            "contract": "LPFeeManagerV2",
+            "label": "factory",
+            "type": "t_contract(IApeFactory)4180",
+            "src": "LPFeeManagerV2.sol:15"
+          }
+        ],
+        "types": {
+          "t_contract(IApeRouter02)4834": {
+            "label": "contract IApeRouter02"
+          },
+          "t_contract(IApeFactory)4180": {
+            "label": "contract IApeFactory"
+          },
+          "t_mapping(t_address,t_bool)": {
+            "label": "mapping(address => bool)"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          }
+        }
+      }
+    }
+  }
+}

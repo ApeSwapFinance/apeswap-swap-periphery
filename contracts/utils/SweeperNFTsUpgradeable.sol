@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity =0.6.6;
+pragma experimental ABIEncoderV2;
 
 /*
  * ApeSwapFinance
@@ -21,10 +22,16 @@ import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
  * This contract makes sure any erc20 tokens can be removed from the contract.
  */
 contract SweeperUpgradeable is OwnableUpgradeable {
+    struct NFT {
+        IERC721 nftaddress;
+        uint256[] ids;
+    }
     mapping (address => bool) public lockedTokens;
     bool public allowNativeSweep;
 
     event SweepWithdrawToken(address indexed receiver, IERC20 indexed token, uint256 balance);
+
+    event SweepWithdrawNFTs(address indexed receiver, NFT[] indexed nfts);
 
     event SweepWithdrawNative(
         address indexed receiver,
@@ -35,10 +42,29 @@ contract SweeperUpgradeable is OwnableUpgradeable {
      * @dev Transfers erc20 tokens to owner
      * Only owner of contract can call this function
      */
-    function sweepTokens(
-        IERC20[] calldata tokens,
+    function sweepTokens(IERC20[] memory tokens, address to) public onlyOwner {
+        NFT[] memory empty;
+        sweepTokensAndNFTs(tokens, empty, to);
+    }
+
+    /**
+     * @dev Transfers NFT to owner
+     * Only owner of contract can call this function
+     */
+    function sweepNFTs(NFT[] memory nfts, address to) public onlyOwner {
+        IERC20[] memory empty;
+        sweepTokensAndNFTs(empty, nfts, to);
+    }
+
+    /**
+     * @dev Transfers ERC20 and NFT to owner
+     * Only owner of contract can call this function
+     */
+    function sweepTokensAndNFTs(
+        IERC20[] memory tokens,
+        NFT[] memory nfts,
         address to
-    ) external onlyOwner {
+    ) public onlyOwner {
         for (uint256 i = 0; i < tokens.length; i++) {
             IERC20 token = tokens[i];
             require(!lockedTokens[address(token)], "Tokens can't be swept");
@@ -46,11 +72,21 @@ contract SweeperUpgradeable is OwnableUpgradeable {
             token.transfer(to, balance);
             emit SweepWithdrawToken(to, token, balance);
         }
+
+        for (uint256 i = 0; i < nfts.length; i++) {
+            IERC721 nftaddress = nfts[i].nftaddress;
+            require(!lockedTokens[address(nftaddress)], "Tokens can't be swept");
+            uint256[] memory ids = nfts[i].ids;
+            for (uint256 j = 0; j < ids.length; j++) {
+                nftaddress.safeTransferFrom(address(this), to, ids[j]);
+            }
+        }
+        emit SweepWithdrawNFTs(to, nfts);
     }
 
     /// @notice Sweep native coin
     /// @param _to address the native coins should be transferred to
-    function sweepNative(address payable _to) external onlyOwner {
+    function sweepNative(address payable _to) public onlyOwner {
         require(allowNativeSweep, "Not allowed");
         uint256 balance = address(this).balance;
         _to.transfer(balance);
