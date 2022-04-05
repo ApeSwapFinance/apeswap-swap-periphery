@@ -19,6 +19,7 @@
     "precompile:truffle": "yarn clean",
     "compile:truffle": "truffle compile",
     "migrate:bsc": "truffle migrate --network bsc",
+    "migrate:polygon": "truffle migrate --network polygon",
     "verify:bsc": "truffle run verify ApeRouter --network bsc",
     "verify:bsc:liq-helper": "truffle run verify LiquidityHelper --network bsc",
     "migrate:testnet": "truffle migrate --network testnet",

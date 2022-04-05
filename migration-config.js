@@ -8,12 +8,6 @@ function getNetworkConfig(network, accounts) {
             feeAddress: '0x94bfE225859347f2B2dd7EB8CBF35B84b4e8Df69',
             liquidityHelper: '0x7BfCD7d5D95b7ce2C4CF30D9e0aB535eD5D34968',
             multicall: '0xC50F4c1E81c873B2204D7eFf7069Ffec6Fbe136D',
-            slippageFactor: 20, // Divided by 1000
-            baseRoutes: [
-                '0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56', // BUSD
-                '0x2170Ed0880ac9A755fd29B2688956BD959F933F8', // ETH
-                '0x603c7f932ED1fc6575303D8Fb018fDCBb0f39a95', // BANANA
-            ]
         }
     } else if (['testnet', 'testnet-fork'].includes(network)) {
         console.log(`Deploying with ${network} config.`)
@@ -33,7 +27,7 @@ function getNetworkConfig(network, accounts) {
         console.log(`Deploying with ${network} config.`)
         return {
             factoryAddress: '0xCf083Be4164828f00cAE704EC15a36D711491284',
-            routerAddress: '0x',
+            routerAddress: '0xC0788A3aD43d79aa53B09c2EaCc313A787d1d607',
             wrappedAddress: '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270'
         }
     } else if (['polygonTestnet', 'polygonTestnet-fork'].includes(network)) {

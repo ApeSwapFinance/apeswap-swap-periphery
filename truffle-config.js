@@ -23,7 +23,7 @@ module.exports = {
       skipDryRun: true
     },
     polygon: {
-      provider: () => new HDWalletProvider(process.env.POLYGON_DEPLOYER_KEY, `https://rpc-mainnet.matic.network`),
+      provider: () => new HDWalletProvider(process.env.POLYGON_DEPLOYER_KEY, `https://polygon-rpc.com/`),
       network_id: 137,
       confirmations: 2,
       timeoutBlocks: 200,
@@ -33,6 +33,7 @@ module.exports = {
       provider: () => new HDWalletProvider(process.env.POLYGON_TESTNET_DEPLOYER_KEY, `https://rpc-mumbai.matic.today`),
       network_id: 80001,
       confirmations: 2,
+      gasPrice: 4000000000,
       timeoutBlocks: 200,
       skipDryRun: true
     },
