@@ -18,34 +18,46 @@ contract LiquidityHelper {
     /// @param token0 Address of token0
     /// @param token1 Address of token1
     /// @return totalLpSupply The total supply of LP tokens minted for the pair
+    /// @return token0 token0 as registered on the pair contract
     /// @return token0Balance The total balance of token0 in the pair
+    /// @return token1 token1 as registered on the pair contract
     /// @return token1Balance The total balance of token1 in the pair
-    function getPairBalances(address token0, address token1)
+    function getPairBalances(address _tokenA, address _tokenB)
         public
         view
-        returns (uint256 totalLpSupply, uint256 token0Balance, uint256 token1Balance)
+        returns (
+            uint256 totalLpSupply,
+            IERC20 token0, 
+            uint256 token0Balance, 
+            IERC20 token1, 
+            uint256 token1Balance
+        )
     {
-        address pair = factory.getPair(token0, token1);
+        address pair = factory.getPair(_tokenA, _tokenB);
         return getPairBalances(pair);
     }
 
     /// @notice Provide a pair address and this will find the pair address related and return useful values
     /// @param pairAddress Address of the pair contract
     /// @return totalLpSupply The total supply of LP tokens minted for the pair
+    /// @return token0 token0 as registered on the pair contract
     /// @return token0Balance The total balance of token0 in the pair
+    /// @return token1 token1 as registered on the pair contract
     /// @return token1Balance The total balance of token1 in the pair
     function getPairBalances(address pairAddress)
         public
         view
         returns (
-            uint256 totalLpSupply, 
+            uint256 totalLpSupply,
+            IERC20 token0, 
             uint256 token0Balance, 
+            IERC20 token1, 
             uint256 token1Balance
         )
     {
         IApePair apePair = IApePair(pairAddress);
-        IERC20 token0 = IERC20(apePair.token0());
-        IERC20 token1 = IERC20(apePair.token1());
+        token0 = IERC20(apePair.token0());
+        token1 = IERC20(apePair.token1());
 
         totalLpSupply = apePair.totalSupply();
         token0Balance = token0.balanceOf(pairAddress);
@@ -53,37 +65,60 @@ contract LiquidityHelper {
     }
 
     /// @notice Find the token outputs for unwrapping LP tokens
-    /// @param token0 Address of the token0 contract
-    /// @param token1 Address of the token1 contract
+    /// @param tokenA Address of the token0 contract
+    /// @param tokenB Address of the token1 contract
     /// @param lpBalance Amount of LP tokens to unwrap
+    /// @return totalLpSupply Total supply of LP tokens for the pair
+    /// @return token0 token0 as registered on the pair contract
     /// @return token0Out The output amount of token0
-    /// @return token1Out The output amount of token1Out
-    function getLiquidityAmountsOut(address token0, address token1, uint256 lpBalance)
+    /// @return token1 token1 as registered on the pair contract
+    /// @return token1Out The output amount of token1
+    function getLiquidityAmountsOut(address tokenA, address tokenB, uint256 lpBalance)
         public
         view
-        returns (uint256 token0Out, uint256 token1Out)
+        returns (
+            uint256 totalLpSupply,
+            IERC20 token0,
+            uint256 token0Out,
+            IERC20 token1,
+            uint256 token1Out
+        )
     {
-        address pair = factory.getPair(token0, token1);
+        address pair = factory.getPair(tokenA, tokenB);
         return getLiquidityAmountsOut(pair, lpBalance);
     }
 
     /// @notice Find the token outputs for unwrapping LP tokens
     /// @param pairAddress Address of the pair contract
     /// @param lpBalance Amount of LP tokens to unwrap
+    /// @return totalLpSupply Total supply of LP tokens for the pair
+    /// @return token0 token0 as registered on the pair contract
     /// @return token0Out The output amount of token0
-    /// @return token1Out The output amount of token1Out
+    /// @return token1 token1 as registered on the pair contract
+    /// @return token1Out The output amount of token1
     function getLiquidityAmountsOut(address pairAddress, uint256 lpBalance)
         public
         view
-        returns (uint256 token0Out, uint256 token1Out)
+        returns (
+            uint256 totalLpSupply,
+            IERC20 token0,
+            uint256 token0Out,
+            IERC20 token1,
+            uint256 token1Out
+        )
     {
         (
-            uint256 totalLpSupply, 
+            uint256 totalLpSupply_, 
+            IERC20 token0_,
             uint256 token0Balance, 
+            IERC20 token1_,
             uint256 token1Balance
         ) = getPairBalances(pairAddress);
 
-        token0Out = lpBalance.mul(token0Balance) / (totalLpSupply);
-        token1Out = lpBalance.mul(token1Balance) / (totalLpSupply);
+        totalLpSupply = totalLpSupply_;
+        token0 = token0_;
+        token1 = token1_;
+        token0Out = lpBalance.mul(token0Balance) / (totalLpSupply_);
+        token1Out = lpBalance.mul(token1Balance) / (totalLpSupply_);
     }
 }
