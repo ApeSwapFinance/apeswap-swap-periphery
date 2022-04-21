@@ -11,7 +11,7 @@ import MulticallBuild from '../build/contracts/Multicall2.json'
 (async function () {
     const ADDRESS_LIST_FILEPATH = __dirname + '/../constants/bsc/ApePairAddresses';
     const pairAddresses: string[] = await readJSONFile(ADDRESS_LIST_FILEPATH);
-    const { factoryAddress, slippageFactor, routerAddress, baseRoutes, multicall: multicallAddress } = getNetworkConfig('bsc');
+    const { factoryAddress, multicall: multicallAddress } = getNetworkConfig('bsc');
     const provider = getDefaultProvider('https://bsc-dataseed1.binance.org')
     // setup contracts
     const multicallContract = new Contract(multicallAddress, MulticallBuild.abi, provider);
