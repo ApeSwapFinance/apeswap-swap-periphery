@@ -5,8 +5,8 @@ import { deployContract } from 'ethereum-waffle'
 
 import { expandTo18Decimals } from './utilities'
 
-import ApeFactory from '../../../apeswap-swap-core/build/ApeFactory.json'
-import IApePair from '../../../apeswap-swap-core/build/IApePair.json'
+import ApeFactory from '../../build-apeswap-dex/contracts/ApeFactory.json'
+import IApePair from '../../build-apeswap-dex/contracts/ApePair.json'
 
 import ERC20 from '../../build/ERC20.json'
 import WETH9 from '../../build/WETH9.json'

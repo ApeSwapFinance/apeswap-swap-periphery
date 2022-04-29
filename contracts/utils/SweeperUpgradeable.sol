@@ -1,0 +1,101 @@
+// SPDX-License-Identifier: MIT
+pragma solidity =0.6.6;
+
+/*
+ * ApeSwapFinance
+ * App:             https://apeswap.finance
+ * Medium:          https://ape-swap.medium.com
+ * Twitter:         https://twitter.com/ape_swap
+ * Telegram:        https://t.me/ape_swap
+ * Announcements:   https://t.me/ape_swap_news
+ * GitHub:          https://github.com/ApeSwapFinance
+ */
+
+import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+
+/**
+ * @dev Sweep any ERC20 token.
+ * Sometimes people accidentally send tokens to a contract without any way to retrieve them.
+ * This contract makes sure any erc20 tokens can be removed from the contract.
+ */
+contract SweeperUpgradeable is OwnableUpgradeable {
+    mapping (address => bool) public lockedTokens;
+    bool public allowNativeSweep;
+
+    event SweepWithdrawToken(address indexed receiver, IERC20 indexed token, uint256 balance);
+
+    event SweepWithdrawNative(
+        address indexed receiver,
+        uint256 balance
+    );
+
+    /**
+     * @dev Transfers erc20 tokens to owner
+     * Only owner of contract can call this function
+     */
+    function sweepTokens(
+        IERC20[] calldata tokens,
+        address to
+    ) external onlyOwner {
+        for (uint256 i = 0; i < tokens.length; i++) {
+            IERC20 token = tokens[i];
+            require(!lockedTokens[address(token)], "Tokens can't be swept");
+            uint256 balance = token.balanceOf(address(this));
+            token.transfer(to, balance);
+            emit SweepWithdrawToken(to, token, balance);
+        }
+    }
+
+    /// @notice Sweep native coin
+    /// @param _to address the native coins should be transferred to
+    function sweepNative(address payable _to) external onlyOwner {
+        require(allowNativeSweep, "Not allowed");
+        uint256 balance = address(this).balance;
+        _to.transfer(balance);
+        emit SweepWithdrawNative(_to, balance);
+    }
+
+    /**
+    * @dev Refuse native sweep.
+    * Once refused can't be allowed again
+    */
+    function refuseNativeSweep() public onlyOwner {
+        allowNativeSweep = false;
+    }
+
+    /**
+     * @dev Lock single token so they can't be transferred from the contract.
+     * Once locked it can't be unlocked
+     */
+    function lockToken(address token) public onlyOwner {
+        _lockToken(token);
+    }
+
+    /**
+     * @dev Lock multiple tokens so they can't be transferred from the contract.
+     * Once locked it can't be unlocked
+     */
+    function lockTokens(address[] memory tokens) public onlyOwner {
+        _lockTokens(tokens);
+    }
+
+    /**
+     * @dev Lock single token so they can't be transferred from the contract.
+     * Once locked it can't be unlocked
+     */
+    function _lockToken(address token) internal {
+        lockedTokens[token] = true;
+    }
+
+    /**
+     * @dev Lock multiple tokens so they can't be transferred from the contract.
+     * Once locked it can't be unlocked
+     */
+    function _lockTokens(address[] memory tokens) internal {
+        for (uint256 i = 0; i < tokens.length; i++) {
+            _lockToken(tokens[i]);
+        }
+    }
+}
