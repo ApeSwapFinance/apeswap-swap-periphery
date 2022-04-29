@@ -1,5 +1,5 @@
 function getNetworkConfig(network, accounts) {
-    if(["bsc", "bsc-fork"].includes(network)) {
+    if (["bsc", "bsc-fork"].includes(network)) {
         console.log(`Deploying with ${network} config.`)
         return {
             factoryAddress: '0x0841BD0B734E4F5853f0dD8d7Ea041c241fb0Da6',
@@ -12,7 +12,7 @@ function getNetworkConfig(network, accounts) {
     } else if (['testnet', 'testnet-fork'].includes(network)) {
         console.log(`Deploying with ${network} config.`)
         return {
-            factoryAddress: '0x152349604d49c2Af10ADeE94b918b051104a143E',
+            factoryAddress: '0x63D001482ac9a4fc8503a2c190F7021fCa27b85b',
             routerAddress: '0x3380aE82e39E42Ca34EbEd69aF67fAa0683Bb5c1',
             wrappedAddress: '0xae13d989dac2f0debff460ac112a837c89baa7cd'
         }
@@ -36,6 +36,20 @@ function getNetworkConfig(network, accounts) {
             factoryAddress: '0xe145a77c21437e3FD32ce2731833114F0B53405b',
             routerAddress: '0x',
             wrappedAddress: '0x'
+        }
+    } else if (['eth', 'ethereum'].includes(network)) {
+        console.log(`Deploying with ${network} config.`)
+        return {
+            factoryAddress: '0xe145a77c21437e3FD32ce2731833114F0B53405b',
+            routerAddress: '0x',
+            wrappedAddress: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2'
+        }
+    } else if (['ropsten'].includes(network)) {
+        console.log(`Deploying with ${network} config.`)
+        return {
+            factoryAddress: '0x0187D959A28B0D3B490c2D898fA1CcD054cCC3cd',
+            routerAddress: '0x',
+            wrappedAddress: '0xc778417E063141139Fce010982780140Aa0cD5Ab'
         }
     } else {
         throw new Error(`No config found for network ${network}.`)
