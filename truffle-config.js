@@ -37,13 +37,27 @@ module.exports = {
       timeoutBlocks: 200,
       skipDryRun: true
     },
+    eth: {
+      provider: () => new HDWalletProvider(process.env.ETH_DEPLOYER_KEY, `https://rpc.ankr.com/eth`),
+      network_id: 1,
+      confirmations: 2,
+      timeoutBlocks: 200,
+      skipDryRun: true
+    },
+    ropsten: {
+      provider: () => new HDWalletProvider(process.env.ROPSTEN_DEPLOYER_KEY, process.env.ROPSTEN_RPC),
+      network_id: 3,
+      confirmations: 2,
+      timeoutBlocks: 200,
+      skipDryRun: true
+    },
   },
   plugins: [
     'truffle-plugin-verify'
   ],
   api_keys: {
     // Add BSCSCAN_API_KEY in .env file to verify contracts deployed through truffle
-    etherscan: process.env.BSCSCAN_API_KEY,
+    etherscan: process.env.ETHERSCAN_API_KEY,
     bscscan: process.env.BSCSCAN_API_KEY,
   },
 
