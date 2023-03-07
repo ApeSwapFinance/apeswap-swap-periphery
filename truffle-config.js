@@ -9,28 +9,28 @@ module.exports = {
       network_id: "*",       // Any network (default: none)
     },
     testnet: {
-      provider: () => new HDWalletProvider(process.env.BSC_TESTNET_DEPLOYER_KEY, `https://data-seed-prebsc-1-s1.binance.org:8545`, 0, 10),
+      provider: () => new HDWalletProvider(process.env.TESTNET_DEPLOYER_KEY, `https://data-seed-prebsc-1-s1.binance.org:8545`, 0, 10),
       network_id: 97,
       confirmations: 2,
       timeoutBlocks: 200,
       skipDryRun: true,
     },
     bsc: {
-      provider: () => new HDWalletProvider(process.env.BSC_DEPLOYER_KEY, `https://bscrpc.com`),
+      provider: () => new HDWalletProvider(process.env.MAINNET_DEPLOYER_KEY, `https://bscrpc.com`),
       network_id: 56,
       confirmations: 2,
       timeoutBlocks: 200,
       skipDryRun: true
     },
     polygon: {
-      provider: () => new HDWalletProvider(process.env.POLYGON_DEPLOYER_KEY, `https://polygon-rpc.com/`),
+      provider: () => new HDWalletProvider(process.env.MAINNET_DEPLOYER_KEY, `https://polygon-rpc.com/`),
       network_id: 137,
       confirmations: 2,
       timeoutBlocks: 200,
       skipDryRun: true
     },
     polygonTestnet: {
-      provider: () => new HDWalletProvider(process.env.POLYGON_TESTNET_DEPLOYER_KEY, `https://rpc-mumbai.matic.today`),
+      provider: () => new HDWalletProvider(process.env.TESTNET_DEPLOYER_KEY, `https://rpc-mumbai.matic.today`),
       network_id: 80001,
       confirmations: 2,
       gasPrice: 4000000000,
@@ -38,27 +38,35 @@ module.exports = {
       skipDryRun: true
     },
     eth: {
-      provider: () => new HDWalletProvider(process.env.ETH_DEPLOYER_KEY, `https://rpc.ankr.com/eth`),
+      provider: () => new HDWalletProvider(process.env.MAINNET_DEPLOYER_KEY, `https://rpc.ankr.com/eth`),
       network_id: 1,
       confirmations: 2,
       timeoutBlocks: 200,
       skipDryRun: true
     },
     ropsten: {
-      provider: () => new HDWalletProvider(process.env.ROPSTEN_DEPLOYER_KEY, process.env.ROPSTEN_RPC),
+      provider: () => new HDWalletProvider(process.env.TESTNET_DEPLOYER_KEY, process.env.ROPSTEN_RPC),
       network_id: 3,
       confirmations: 2,
       timeoutBlocks: 200,
       skipDryRun: true
+    },
+    arbitrum: {
+      provider: () => new HDWalletProvider(process.env.MAINNET_DEPLOYER_KEY, `https://arbitrum.blockpi.network/v1/rpc/public`),
+      network_id: `42161`,
+      confirmations: 2,
+      gasPrice: 1e8,
+      timeoutBlocks: 200,
+      skipDryRun: false
     },
   },
   plugins: [
     'truffle-plugin-verify'
   ],
   api_keys: {
-    // Add BSCSCAN_API_KEY in .env file to verify contracts deployed through truffle
     etherscan: process.env.ETHERSCAN_API_KEY,
     bscscan: process.env.BSCSCAN_API_KEY,
+    arbiscan: process.env.ARBISCAN_API_KEY,
   },
 
   // Set default mocha options here, use special reporters etc.

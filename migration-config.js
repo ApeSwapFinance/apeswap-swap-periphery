@@ -51,6 +51,14 @@ function getNetworkConfig(network, accounts) {
             routerAddress: '0x',
             wrappedAddress: '0xc778417E063141139Fce010982780140Aa0cD5Ab'
         }
+    } else if (['arbitrum', 'arbitrum-fork'].includes(network)) {
+        console.log(`Deploying with ${network} config.`)
+        return {
+            factoryAddress: '0xCf083Be4164828f00cAE704EC15a36D711491284',
+            routerAddress: '0x',
+            wrappedAddress: '0x82af49447d8a07e3bd95bd0d56f35241523fbab1' // wETH on Arbitrum
+            // wrappedAddress: '0x652a5D4DF76C5bfa3cB87FFD6877260600C2745d' // Immutable wETH on Arbitrum
+        }
     } else {
         throw new Error(`No config found for network ${network}.`)
     }
