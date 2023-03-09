@@ -29,7 +29,7 @@ import "./SafeMath.sol";
 abstract contract ApePairMath {
     using SafeMath for uint;
 
-    function INIT_CODE_PAIR_HASH() internal view virtual returns (bytes32);
+    function INIT_CODE_PAIR_HASH() public view virtual returns (bytes32);
 
     // returns sorted token addresses, used to handle return values from pairs sorted in this order
     function _sortTokens(address tokenA, address tokenB) internal pure returns (address token0, address token1) {

@@ -54,7 +54,7 @@ contract ApeRouter is ApePairMath, IApeRouter02 {
         assert(msg.sender == WETH); // only accept ETH via fallback from the WETH contract
     }
 
-    function INIT_CODE_PAIR_HASH() internal view override returns (bytes32) {
+    function INIT_CODE_PAIR_HASH() public view override returns (bytes32) {
         return _INIT_CODE_PAIR_HASH;
     }
 
