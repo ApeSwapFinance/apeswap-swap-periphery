@@ -169,6 +169,10 @@ contract ApeOnlyPriceGetterBSC is IPriceGetter {
         (lpTokens, lpValue) = pairTokensAndValue(token, WNATIVE);
         numTokens += lpTokens;
         pairedValue += lpValue;
+        
+        (lpTokens, lpValue) = pairTokensAndValue(token, BUSD);
+        numTokens += lpTokens;
+        pairedValue += lpValue;
 
         (lpTokens, lpValue) = pairTokensAndValue(token, DAI);
         numTokens += lpTokens;
