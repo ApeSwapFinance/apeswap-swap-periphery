@@ -3,6 +3,8 @@ pragma solidity >=0.6.6;
 interface IApeFactory {
     event PairCreated(address indexed token0, address indexed token1, address pair, uint);
 
+    function INIT_CODE_PAIR_HASH() external view returns (bytes32);
+
     function feeTo() external view returns (address);
     function feeToSetter() external view returns (address);
 
